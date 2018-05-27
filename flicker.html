@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+
+		<title>Fotos Flicker</title>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+	</head>
+	<body>
+
+		<script>
+			$(document).ready(function () {
+				$.ajax({
+					url: 'https://api.flickr.com/services/rest/?method=flickr.photos.getRecent',
+					method: 'GET',
+					dataType: 'json',
+					data: {
+						api_key: 'de231e4577562d956dda8e3c75a5e1c5',
+						api_sig:'0cc8a4f20397f3c5a3be20415d8e0d8f',
+						format: 'json',
+						nojsoncallback: 1
+					},
+					success: function (data) {
+						var url = 'https://farm1.staticflickr.com/{server-id}/{id}_{secret}.jpg';
+
+						$(data.photos.photo).slice(0, 6).each(function (i, photo) {
+							var formattedUrl = url
+								.replace('{server-id}', photo.server)
+								.replace('{id}', photo.id)
+								.replace('{secret}', photo.secret);
+
+							var img = $('<img>');
+							img.attr('src', formattedUrl);
+
+							$('body').append(img);
+						});
+					}
+				});
+			});
+		</script>
+	</body>
+</html>
